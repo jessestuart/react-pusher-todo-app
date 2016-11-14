@@ -25,7 +25,7 @@ module.exports = {
 }
 ```
 
-In the interest of focusing on the meat of the app, I've gone ahead and set up the app [here][source]. Download de code and run [`npm install`][npm] or [`yarn`][yarn] to install all of the dependencies.
+In the interest of focusing on the meat of the app, I've gone ahead and set up the app [here][source]. Download the code and run [`npm install`][npm] or [`yarn`][yarn] to install all of the dependencies.
 
 
 #### Client
