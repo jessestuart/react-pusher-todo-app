@@ -184,8 +184,8 @@ channel.bind('pusher:subscription_succeeded', () => {
 Once we're satisfied with our connection we can bind handlers to `newChore` and `toggleChore` events that might come in from the server when other members of the household edit the list. If you recall, we've already written generic handler functions for both those actions in our React component so we can simply bind them directly to the events like so:
 
 ```javascript
-channel.bind('newChore', this.addChore);
-channel.bind('toggleChore', this.toggleChore);
+channel.bind('new_chore', this.addChore);
+channel.bind('toggle_chore', this.toggleChore);
 ```
 
 With that we are ready to handle incoming events!!

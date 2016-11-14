@@ -119,8 +119,8 @@
 	      channel.bind('pusher:subscription_succeeded', function () {
 	        console.log('subscription succeeded! 🎉');
 	      });
-	      channel.bind('newChore', this.addChore);
-	      channel.bind('toggleChore', this.toggleChore);
+	      channel.bind('new_chore', this.addChore);
+	      channel.bind('toggle_chore', this.toggleChore);
 	    }
 	  }, {
 	    key: 'addChore',
