@@ -157,10 +157,6 @@
 	      _axios2.default.post('/toggleChore', {
 	        chore: clickedChore,
 	        socketId: pusher.socket_id
-	      }).then(function (response) {
-	        console.log(response);
-	      }).catch(function (error) {
-	        console.log(error);
 	      });
 	    }
 	  }, {
@@ -175,12 +171,7 @@
 	      _axios2.default.post('/newChore', {
 	        chore: choreToAdd,
 	        socketId: pusher.socket_id
-	      }).then(function (response) {
-	        console.log(response);
-	      }).catch(function (error) {
-	        console.log(error);
 	      });
-	      console.log(this.state);
 	    }
 	  }, {
 	    key: 'render',

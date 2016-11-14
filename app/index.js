@@ -66,11 +66,7 @@ class MyChoresApp extends Component {
     axios.post('/toggleChore', {
       chore: clickedChore,
       socketId: pusher.socket_id
-    }).then((response) => {
-      console.log(response);
-    }).catch((error) => {
-      console.log(error);
-    });
+    })
   }
 
   handleSubmit(e) {
@@ -83,12 +79,7 @@ class MyChoresApp extends Component {
     axios.post('/newChore', {
       chore: choreToAdd,
       socketId: pusher.socket_id
-    }).then((response) => {
-      console.log(response);
-    }).catch((error) => {
-      console.log(error);
-    });
-    console.log(this.state);
+    })
   }
   render() {
     return (

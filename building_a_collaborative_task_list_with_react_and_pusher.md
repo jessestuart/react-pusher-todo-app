@@ -2,13 +2,13 @@
 
 # Keepin' it Real(time): Building a collaborative task list with React + Pusher
 
-My housemates and I have the bad habit of being completely out of sync when it comes to household chores.  Busy schedules mean we rarely bump into one another and we are usually either having to wrestle the last drop out of the dish soap for a whole week (the 'I'm sure someone else will do it' fallacy) or stockpiling bottles in the cupboard like the apocalypse is coming because we all "happened" to stop by the store on the same day. But no more! I've decided to remedy the situation and today I am going to show you how to build an application that will allow us to collaborate on a list of household chores in real time so the dog gets walked and no light bulbs ever go unchanged. 
+My housemates and I have the bad habit of being completely out of sync when it comes to household chores.  Busy schedules mean we rarely bump into one another and we are usually either having to wrestle the last drop out of the dish soap for a whole week (the 'I'm sure someone else will do it' fallacy) or stockpiling bottles in the cupboard like the apocalypse is coming because we all "happened" to stop by the store on the same day. But no more! I've decided to remedy the situation and today I am going to show you how to build an application that will allow us to collaborate on a list of household chores in real time so the dog gets walked and no light bulbs ever go unchanged.
 
 ### The Challenge
 
-Our final product will allow us to (1) add new chores, (2) mark a chore as complete and (3) have all users' lists update in real time so everyone knows when a task is complete. Wouldn't want to pay the electric bill twice! 
+Our final product will allow us to (1) add new chores, (2) mark a chore as complete and (3) have all users' lists update in real time so everyone knows when a task is complete. Wouldn't want to pay the electric bill twice!
 
-We will be using a Node.js server and a React client. React will allow us to easily re-render the DOM with every update and keep the state of our list. We'll also be using the [Pusher API][pusher] for all of our realtime needs. Pusher will take care of managing our WebSocket connections and allow us to subscribe to events so we never miss a toothpaste emergency. 
+We will be using a Node.js server and a React client. React will allow us to easily re-render the DOM with every update and keep the state of our list. We'll also be using the [Pusher API][pusher] for all of our realtime needs. Pusher will take care of managing our WebSocket connections and allow us to subscribe to events so we never miss a toothpaste emergency.
 
 If you want to see what the application looks like completed, you can grab the [source code on GitHub][source].
 
@@ -20,7 +20,7 @@ The first thing we're going to do is set up our environment. We have to head ove
 module.exports = {
   app_id: YOUR_APP_ID,
   key: YOUR_APP_KEY,
-  secret: YOUR_APP_SECRET, 
+  secret: YOUR_APP_SECRET,
   cluster: YOUR_CLUSTER
 }
 ```
@@ -50,7 +50,7 @@ Next we'll need to make sure our React app is ready to make use of the Pusher AP
 </html>
 ```
 
-Our React app will consist of two main components: An `AddChores` component that will have a text input box and a button, and a `ChoresList` component that will render out chores and allow us to tick them off our list. 
+Our React app will consist of two main components: An `AddChores` component that will have a text input box and a button, and a `ChoresList` component that will render out chores and allow us to tick them off our list.
 
 ```javascript
 render() {
@@ -69,11 +69,11 @@ render() {
     )
   }
   ```
-  
-Our final product will look something like this: 
+
+Our final product will look something like this:
 
   <div style="text-align: center; padding: 0px; margin: 0px;"><img src="https://github.com/elischutze/react-pusher-todo-app/blob/master/assets/choresapp.png?raw=true" width="50%"/></div>
-  
+
 ### The Good Stuff
 
 We'll start by initialising the app state to have a list of chores and some text to store the input from the box. I've thrown in a couple of chores in there to start with. Each chore is an object that contains the chore and a flag to mark whether it is completed or not:
@@ -96,7 +96,7 @@ We then have to write the logic to handle adding or changing a chore from the li
 
 ```javascript
   addChore(data) {
-  	// state should be immutable in React so we're creating a new array with the 
+  	// state should be immutable in React so we're creating a new array with the
   	// new data
     const newChoreAdded = this.state.chores.concat({
       chore: data,
@@ -118,7 +118,7 @@ We then have to write the logic to handle adding or changing a chore from the li
     this.setState({ chores: changedChores })
   }
   ```
-  
+
 #### User change
 
 We can then add handlers for user actions on the app. Note that we are using our generic `addChore` and `toggleChore` functions from earlier!
@@ -128,7 +128,7 @@ We can then add handlers for user actions on the app. Note that we are using our
 handleInputChange(e) {
     this.setState({ text: e.target.value })
   }
-  
+
 // When we press the add button
 handleSubmit(e) {
   e.preventDefault()
@@ -145,13 +145,13 @@ handleCheck(e) {
 }
 ```
 
-If you remember from our `render()` function above, we're going to pass these event handlers to our components as props so we can decouple our business logic from our UI. 
+If you remember from our `render()` function above, we're going to pass these event handlers to our components as props so we can decouple our business logic from our UI.
 
 ### The Main Event
 
-Now that we can add and check off chores from our list, we have to make the app collaborative with the rest of the house! 
+Now that we can add and check off chores from our list, we have to make the app collaborative with the rest of the house!
 
-To do this we need to know about two important parts of the Pusher API: Channels and Events. A channel is a namespace for a collection of events. A client can *subscribe* to a specific channel, awaiting events to be fired on it, and both the server and the client can *trigger* an event on that channel that will be broadcast to the other subscribers. In order to act on triggered events, a subscriber must *bind* events to handler functions that will be called when that event is received. 
+To do this we need to know about two important parts of the Pusher API: **Channels** and **Events**. A channel is a namespace for a collection of events. A client can *subscribe* to a specific channel, awaiting events to be fired on it, and both the server and the client can *trigger* an event on that channel that will be broadcast to the other subscribers. In order to act on triggered events, a subscriber must *bind* events to handler functions that will be called when that event is received.
 
 Let me show you what that looks like in our Chores app. We'll start off by  instantiating Pusher in our React app with our app key (from our Pusher account) and some options, in this case our Pusher app cluster:
 
@@ -161,19 +161,19 @@ const pusher = new Pusher(config.key, {
 });
 ```
 
-We then have to set up our subscription which is a connection to the server-side WebSocket. In React, the way to do this is in the `ComponentDidMount` lifecycle function.  In our case we'll be subscribing to a channel called `chores`: 
+We then have to set up our subscription which is a connection to the server-side WebSocket. In React, the way to do this is in the `ComponentDidMount` lifecycle function.  In our case we'll be subscribing to a channel called `chores`:
 
 ```javascript
 let channel = pusher.subscribe('chores');
 ```
 
-Piece of cake! Once we're subscribed, we can bind the events that are triggered on that  channel to handler functions we define. The format looks something like: 
+Piece of cake! Once we're subscribed, we can bind the events that are triggered on that  channel to handler functions we define. The format looks something like:
 
 ```javascript
 channel.bind('myEventName', myHandlerFunction);
 ```
 
-Pusher has this neat feature where you can bind a handler to Pusher channel events (prexifed by `pusher:`) that return information about our connection. We can check our subscription succeded by doing the following: 
+Pusher has this neat feature where you can bind a handler to Pusher channel events (prexifed by `pusher:`) that return information about our connection. We can check our subscription succeded by doing the following:
 
 ```javascript
 channel.bind('pusher:subscription_succeeded', () => {
@@ -188,12 +188,12 @@ channel.bind('newChore', this.addChore);
 channel.bind('toggleChore', this.toggleChore);
 ```
 
-With that we are ready to handle incoming events!! 
+With that we are ready to handle incoming events!!
 
 ### The Final Piece
 
 
-The last thing we need to take care of, is updating our Pusher channel whenever *we* make a change so that it'll broadcast in realtime to the housemates. The way we're going to do this is by making an async `POST` HTTP request to our server that will then trigger an event on the `chores` channel. 
+The last thing we need to take care of, is updating our Pusher channel whenever *we* make a change so that it'll broadcast in realtime to the housemates. The way we're going to do this is by making an async `POST` HTTP request to our server that will then trigger an event on the `chores` channel.
 
 
 #### Server
@@ -215,7 +215,7 @@ app.get('/', function (req, res) {
 
 app.post('/newChore', function (req, res) {
   console.log('New chore request:', req.body);
-  /* 
+  /*
   --------------------------------------------------
   LOGIC FOR ADDING A NEW CHORE TO THE LIST GOES HERE
   --------------------------------------------------
@@ -224,7 +224,7 @@ app.post('/newChore', function (req, res) {
 
 app.post('/toggleChore', function (req, res) {
   console.log('Toggle chore request:', req.body);
-  /* 
+  /*
   --------------------------------------------------
   LOGIC FOR CHECKING/UNCHECKING A CHORE GOES HERE
   --------------------------------------------------
@@ -269,11 +269,44 @@ pusher.trigger(
    );
 ```
 
+Our very last bit to wire it all together is sending the server an AJAX POST request whenever we add to the list. To do that we'll add `axios` calls inside our existing event listeners:
+
+```javascript
+handleCheck(e) {
+  const clickedChore = e.target.value
+  this.toggleChore(clickedChore) //update our own UI
+  axios.post('/toggleChore', { // also send update to the server to broadcast
+    chore: clickedChore,
+    socketId: pusher.socket_id
+  })
+}
+
+handleSubmit(e) {
+  e.preventDefault()
+  const choreToAdd = this.state.text
+  this.addChore(choreToAdd) //update our own UI
+  this.setState({
+    text: ''
+  })
+  axios.post('/newChore', {
+    chore: choreToAdd, // also send update to the server to broadcast
+    socketId: pusher.socket_id
+  })
+}
+
+```
+
+### We Did It
+
+With that we've succesfully created a realtime collaborative tasks application with React and the Pusher Realtime API. If you want to learn about what  more you can do with Pusher don't hesitate to check out the [documentation][docs] or check out other [tutorials and examples][tuts]! 🎉
+
 
 
 [pusher]:https://pusher.com
 [newacct]:https://pusher.com/signup
 [source]: https://github.com/elischutze/react-pusher-todo-app
 [pushjs]: https://github.com/pusher/pusher-js
+[docs]:https://pusher.com/docs
+[tuts]: https://pusher.com/tutorials
 [npm]: https://npmjs.com
 [yarn]: https://yarnpkg.com
