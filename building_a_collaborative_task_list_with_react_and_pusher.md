@@ -2,7 +2,7 @@
 
 # Keepin' it Real(time): Building a collaborative task list with React + Pusher
 
-My housemates and I have the bad habit of being completely out of sync when it comes to household chores.  Busy schedules mean we rarely bump into one another and we are usually either having to wrestle the last drop out of the dish soap for a whole week (the 'I'm sure someone else will do it' fallacy) or stockpiling bottles in the cupboard like the apocalypse is coming because we all "happened" to stop by the store on the same day. But no more! I've decided to remedy the situation and today I am going to show you how to build an application that will allow us to collaborate on a list of household chores in real time so the dog gets walked and no light bulbs ever go unchanged.
+My housemates and I have the bad habit of being completely out of sync when it comes to household chores.  Busy schedules mean we rarely bump into one another and we are usually either having to wrestle the last drop out of the dish soap for a whole week (the 'I'm sure someone else will do it' fallacy) or stockpiling bottles in the cupboard like the apocalypse is coming because we all "happened" to stop by the store on the same day. I've decided to remedy the situation and today I am going to show you how to build an application that will allow us to collaborate on a list of household chores in real time so the dog gets walked and no light bulbs ever go unchanged.
 
 ### The Challenge
 
@@ -296,10 +296,10 @@ handleSubmit(e) {
 
 ```
 
-### We Did It
+### We Did It!
 
 With that we've succesfully created a realtime collaborative tasks application with React and the Pusher Realtime API (and saved my household from revolt!). If you want to learn about what more you can do with Pusher don't hesitate to check out the [documentation][docs] or check out other [tutorials and examples][tuts]!  🎉
-
+Moving forward we could add functionality to handle new user connections so they always get fresh data and add information to the chores about who added it. Until next time.
 
 [pusher]:https://pusher.com
 [newacct]:https://pusher.com/signup

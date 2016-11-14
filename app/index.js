@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom'
 import AddChores from './components/AddChores'
 import ChoresList from './components/ChoresList'
 import axios from 'axios'
-import config from './config'
+import config from '../config'
 const pusher = new Pusher(config.key, {
   cluster: config.cluster
 });
@@ -32,7 +32,7 @@ class MyChoresApp extends Component {
     channel.bind('pusher:subscription_succeeded', () => {
       console.log('subscription succeeded! 🎉');
     });
-    channel.bind('new_chore', this.addChore)
+    channel.bind('new_chore', function(){console.log(this.addChore);})//this.addChore)
     channel.bind('toggle_chore', this.toggleChore)
   }
 

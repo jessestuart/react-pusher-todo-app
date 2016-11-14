@@ -75,7 +75,7 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
-	var _config = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./config\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _config = __webpack_require__(200);
 	
 	var _config2 = _interopRequireDefault(_config);
 	
@@ -119,7 +119,9 @@
 	      channel.bind('pusher:subscription_succeeded', function () {
 	        console.log('subscription succeeded! 🎉');
 	      });
-	      channel.bind('new_chore', this.addChore);
+	      channel.bind('new_chore', function () {
+	        console.log(this.addChore);
+	      }); //this.addChore)
 	      channel.bind('toggle_chore', this.toggleChore);
 	    }
 	  }, {
@@ -23174,6 +23176,19 @@
 	  };
 	};
 
+
+/***/ },
+/* 200 */
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = {
+	  app_id: "267907",
+	  key: "bbe790a322271f8ea80a",
+	  secret: "f41424136b45ef5bbb97",
+	  cluster: "eu"
+	};
 
 /***/ }
 /******/ ]);

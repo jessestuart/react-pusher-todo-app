@@ -1,6 +1,5 @@
 var config = require('./config')
 var bodyParser = require('body-parser');
-
 var express = require('express')
 var app = express()
 
@@ -24,10 +23,13 @@ app.post('/newChore', function (req, res) {
   var newChore = req.body.chore
   var client = req.body.socketId
   console.log('new Chore:', newChore);
-  pusher.trigger('chores', 'addChore', {
-    chore: newChore
-  }, client);
-  // res.sendStatus(200)
+  pusher.trigger(
+    'chores',
+    'addChore',
+    { chore: newChore },
+     client
+   );
+  res.send('k')
 })
 
 app.post('/toggleChore', function (req, res) {
@@ -35,12 +37,16 @@ app.post('/toggleChore', function (req, res) {
   var changedChore = req.body.chore
   var client = req.body.socketId
   console.log('toggled Chore:', changedChore);
-  pusher.trigger('chores', 'toggleChore', {
-    chore: changedChore
-  }, client);
-  // res.sendStatus(200)
+  pusher.trigger(
+    'chores',
+    'toggle_chore',
+    {
+    chore: changedChore },
+    client
+  );
+  res.send('k')
 })
 
 app.listen(process.env.PORT || 3000, function () {
-  console.log('👂 App listening on port 3000')
+  console.log('👂 App listening on port 3000!')
 })
