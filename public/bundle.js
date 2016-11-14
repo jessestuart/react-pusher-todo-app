@@ -75,6 +75,10 @@
 	
 	var _axios2 = _interopRequireDefault(_axios);
 	
+	var _config = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./config\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _config2 = _interopRequireDefault(_config);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -83,10 +87,8 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var key = "bbe790a322271f8ea80a";
-	var cluster = "eu";
-	var pusher = new Pusher(key, {
-	  cluster: cluster
+	var pusher = new Pusher(_config2.default.key, {
+	  cluster: _config2.default.cluster
 	});
 	
 	var MyChoresApp = function (_Component) {
@@ -123,7 +125,6 @@
 	  }, {
 	    key: 'addChore',
 	    value: function addChore(data) {
-	
 	      var newChoreAdded = this.state.chores.concat({
 	        chore: data,
 	        done: false

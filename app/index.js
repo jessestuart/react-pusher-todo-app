@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom'
 import AddChores from './components/AddChores'
 import ChoresList from './components/ChoresList'
 import axios from 'axios'
-const key = "bbe790a322271f8ea80a"
-const cluster = "eu"
-const pusher = new Pusher(key, {
-  cluster: cluster
+import config from './config'
+const pusher = new Pusher(config.key, {
+  cluster: config.cluster
 });
 
 class MyChoresApp extends Component {
@@ -29,8 +28,8 @@ class MyChoresApp extends Component {
 
   componentDidMount() {
     console.log(this.state);
-    var channel = pusher.subscribe('chores');
-    channel.bind('pusher:subscription_succeeded', function() {
+    let channel = pusher.subscribe('chores');
+    channel.bind('pusher:subscription_succeeded', () => {
       console.log('subscription succeeded! 🎉');
     });
     channel.bind('newChore', this.addChore)
@@ -38,7 +37,6 @@ class MyChoresApp extends Component {
   }
 
   addChore(data) {
-    
     const newChoreAdded = this.state.chores.concat({
       chore: data,
       done: false
