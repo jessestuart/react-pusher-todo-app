@@ -16,7 +16,7 @@ If you want to see what the application looks like completed, you can grab the [
 
 The first thing we're going to do is set up our environment. We have to head over to the [Pusher website][newacct] to create a free(!) account and get access to the realtime API. Once we've done that, we can save our application details in a file `config.js` :
 
-```
+```javascript
 module.exports = {
   app_id: YOUR_APP_ID,
   key: YOUR_APP_KEY,
@@ -32,7 +32,7 @@ In the interest of focusing on the meat of the app, I've gone ahead and set up t
 
 Next we'll need to make sure our React app is ready to make use of the Pusher API so we need to make sure to include the [Pusher javascript library][pushjs] in our `index.html` file:
 
-```
+```html
 <!DOCTYPE html>
 <html>
   <head>
@@ -52,7 +52,7 @@ Next we'll need to make sure our React app is ready to make use of the Pusher AP
 
 Our React app will consist of two main components: An `AddChores` component that will have a text input box and a button, and a `ChoresList` component that will render out chores and allow us to tick them off our list. 
 
-```
+```javascript
 render() {
     return (
       <div>
@@ -79,7 +79,7 @@ Our final product will look something like this:
 We'll start by initialising the app state to have a list of chores and some text to store the input from the box. I've thrown in a couple of chores in there to start with. Each chore is an object that contains the chore and a flag to mark whether it is completed or not:
 
 
-```
+```javascript
 constructor(props) {
     super(props)
     this.state = {
@@ -94,7 +94,7 @@ constructor(props) {
 We then have to write the logic to handle adding or changing a chore from the list. Because our list might update either from our own creation or from the Pusher API socket, we'll write a generic `addChore` and `toggleChore` function:
 
 
-```
+```javascript
   addChore(data) {
   	// state should be immutable in React so we're creating a new array with the 
   	// new data
@@ -123,7 +123,7 @@ We then have to write the logic to handle adding or changing a chore from the li
 
 We can then add handlers for user actions on the app. Note that we are using our generic `addChore` and `toggleChore` functions from earlier!
 
-```
+```javascript
 // When we type into the text box
 handleInputChange(e) {
     this.setState({ text: e.target.value })
@@ -155,7 +155,7 @@ To do this we need to know about two important parts of the Pusher API: Channels
 
 Let me show you what that looks like in our Chores app. We'll start off by  instantiating Pusher in our React app with our app key (from our Pusher account) and some options, in this case our Pusher app cluster:
 
-```
+```javascript
 const pusher = new Pusher(config.key, {
   cluster: config.cluster
 });
@@ -163,19 +163,19 @@ const pusher = new Pusher(config.key, {
 
 We then have to set up our subscription which is a connection to the server-side WebSocket. In React, the way to do this is in the `ComponentDidMount` lifecycle function.  In our case we'll be subscribing to a channel called `chores`: 
 
-```
+```javascript
 let channel = pusher.subscribe('chores');
 ```
 
 Piece of cake! Once we're subscribed, we can bind the events that are triggered on that  channel to handler functions we define. The format looks something like: 
 
-```
+```javascript
 channel.bind('myEventName', myHandlerFunction);
 ```
 
 Pusher has this neat feature where you can bind a handler to Pusher channel events (prexifed by `pusher:`) that return information about our connection. We can check our subscription succeded by doing the following: 
 
-```
+```javascript
 channel.bind('pusher:subscription_succeeded', () => {
       console.log('subscription succeeded! 🎉');
     });
@@ -183,7 +183,7 @@ channel.bind('pusher:subscription_succeeded', () => {
 
 Once we're satisfied with our connection we can bind handlers to `newChore` and `toggleChore` events that might come in from the server when other members of the household edit the list. If you recall, we've already written generic handler functions for both those actions in our React component so we can simply bind them directly to the events like so:
 
-```
+```javascript
 channel.bind('newChore', this.addChore);
 channel.bind('toggleChore', this.toggleChore);
 ```
@@ -200,7 +200,7 @@ The last thing we need to take care of, is updating our Pusher channel whenever 
 
 Our server is an Express app and looks something like this:
 
-```
+```javascript
 var config = require('./config')
 var bodyParser = require('body-parser');
 var express = require('express')
@@ -241,7 +241,7 @@ app.listen(process.env.PORT || 3000, function () {
 The last thing we're missing is adding the [Pusher Realtime API][pusher] so we're going to go ahead and require our `config.js` file as well as the Pusher module:
 
 
-```
+```javascript
 var config = require('./config')
 var Pusher = require('pusher')
 ```
@@ -249,7 +249,7 @@ var Pusher = require('pusher')
 We then have to instansiate Pusher using our app credentials:
 
 
-```
+```javascript
 var pusher = new Pusher({
   appId: config.app_id,
   key: config.key,
@@ -261,7 +261,7 @@ var pusher = new Pusher({
 and we can now fill in the logic of our endpoints with Pusher triggers like so:
 
 
-```
+```javascript
 pusher.trigger(
     'chores', // Our channel name
     'addChore', // The event name
