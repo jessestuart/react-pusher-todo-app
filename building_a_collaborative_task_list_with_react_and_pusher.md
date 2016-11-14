@@ -298,8 +298,7 @@ handleSubmit(e) {
 
 ### We Did It
 
-With that we've succesfully created a realtime collaborative tasks application with React and the Pusher Realtime API. If you want to learn about what  more you can do with Pusher don't hesitate to check out the [documentation][docs] or check out other [tutorials and examples][tuts]! 🎉
-
+With that we've succesfully created a realtime collaborative tasks application with React and the Pusher Realtime API (and saved my household from revolt!). If you want to learn about what more you can do with Pusher don't hesitate to check out the [documentation][docs] or check out other [tutorials and examples][tuts]!  🎉
 
 
 [pusher]:https://pusher.com
