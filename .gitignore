@@ -1,0 +1,6 @@
+*.lock
+node_modules
+config.js
+*.map
+.DS_Store
+*.log

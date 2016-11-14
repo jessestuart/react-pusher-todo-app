@@ -1,0 +1,22 @@
+.pending {
+  font-weight: bold;
+}
+
+.done {
+  color: grey;
+  text-decoration: line-through;
+}
+
+li {
+  list-style: none;
+  text-align: right;
+}
+
+ul {
+  width: 230px;
+}
+
+body {
+  text-align: left;
+  padding: 40px;
+}
