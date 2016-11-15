@@ -245,7 +245,7 @@ var config = require('./config')
 var Pusher = require('pusher')
 ```
 
-We then have to instansiate Pusher using our app credentials:
+We then have to instantiate Pusher using our app credentials:
 
 
 ```javascript
