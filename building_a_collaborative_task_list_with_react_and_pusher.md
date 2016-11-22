@@ -76,7 +76,7 @@ Our final product will look something like this:
 
 ### The Good Stuff
 
-We'll start by initialising (lol) the app state to have a list of chores and some text to store the input from the box. I've thrown a couple of chores in there to start with. Each chore is an object that contains the chore and a flag to mark whether it is completed or not:
+We'll start by initialising the app state to have a list of chores and some text to store the input from the box. I've thrown a couple of chores in there to start with. Each chore is an object that contains the chore and a flag to mark whether it is completed or not:
 
 ```javascript
 constructor(props) {
@@ -152,6 +152,7 @@ handleCheck(e) {
  const clickedChore = e.target.value
  this.toggleChore(clickedChore)
 }
+// I'm sorry but I just have to ask. Why no semicolon love? :(
 ```
 
 If you remember from our `render()` function above, we're going to pass these event handlers to our components as props so we can decouple our business logic from our UI.
@@ -161,6 +162,8 @@ If you remember from our `render()` function above, we're going to pass these ev
 Now that we can add and check off chores from our list, we have to make the app collaborative with the rest of the house!
 
 To do this we need to know about two important parts of the Pusher API: **Channels** and **Events**. A channel is a namespace for a collection of events. A client can *subscribe* to a specific channel, awaiting events to be fired on it, and both the server and the client can *trigger* an event on that channel that will be broadcast to the other subscribers. In order to act on triggered events, a subscriber must *bind* events to handler functions that will be called when that event is received.
+
+> This is actually somewhat similar to how redux works! Or really, any compsci paradigm where to subscribe to changes (e.g. redux, pusher) instead of setting up watches (e.g. angular.
 
 Let me show you what that looks like in our Chores app. We'll start off by instantiating Pusher in our React app with our app key (from our Pusher account) and some options, in this case our Pusher app cluster:
 
@@ -173,6 +176,7 @@ const pusher = new Pusher(config.key, {
 We then have to set up our subscription which is a connection to the server-side WebSocket. In React, the way to do this is in the `ComponentDidMount` lifecycle function.  In our case we'll be subscribing to a channel called `chores`:
 
 ```javascript
+// Any reason this is a `let` as opposed to a `const`?
 let channel = pusher.subscribe('chores');
 ```
 
@@ -224,6 +228,7 @@ app.get('/', function (req, res) {
 
 app.post('/newChore', function (req, res) {
   console.log('New chore request:', req.body);
+  // Assuming these are meant to be mocked out?
   /*
   --------------------------------------------------
   LOGIC FOR ADDING A NEW CHORE TO THE LIST GOES HERE
@@ -278,7 +283,7 @@ pusher.trigger(
    );
 ```
 
-Our very last bit to wire it all together is sending the server an AJAX POST request whenever we add to the list. To do that we'll add `axios` calls inside our existing event listeners:
+Our very last bit to wire it all together is sending the server an AJAX POST request whenever we add to the list. To do that we'll add `axios` calls inside our existing event listeners: (you totally lost me here. what is axios? where is it being imported?)
 
 ```javascript
 handleCheck(e) {
