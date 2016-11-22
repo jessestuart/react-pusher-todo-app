@@ -14,7 +14,7 @@ If you want to see what the application looks like completed, you can grab the [
 
 ### Setup
 
-The first thing we're going to do is set up our environment. We have to head over to the [Pusher website][newacct] to create a free(!) account and get access to the realtime API. Once we've done that, we can save our application details in a file `config.js` :
+The first thing we're going to do is set up our environment. We have to head over to the [Pusher website][newacct] to create a free(!) account and get access to the realtime API. Once we've done that, we can save our application details in a file `config.js` (*you'll usually want to do this with a project like https://github.com/motdotla/dotenv, so you don't have to check in production credentials to source control.*):
 
 ```javascript
 module.exports = {
@@ -76,8 +76,7 @@ Our final product will look something like this:
 
 ### The Good Stuff
 
-We'll start by initialising the app state to have a list of chores and some text to store the input from the box. I've thrown in a couple of chores in there to start with. Each chore is an object that contains the chore and a flag to mark whether it is completed or not:
-
+We'll start by initialising (lol) the app state to have a list of chores and some text to store the input from the box. I've thrown a couple of chores in there to start with. Each chore is an object that contains the chore and a flag to mark whether it is completed or not:
 
 ```javascript
 constructor(props) {
@@ -96,8 +95,14 @@ We then have to write the logic to handle adding or changing a chore from the li
 
 ```javascript
   addChore(data) {
+    // NBD, but it's generally best to refrain from having var names like 'data'.
+    // maybe `addChore(newChore)` or `addChore(newChoreData)`?
+
   	// state should be immutable in React so we're creating a new array with the
   	// new data
+
+    // NB: It may not make a difference to you, but I would totally use lodash here 
+    //     (and in a couple other places)
     const newChoreAdded = this.state.chores.concat({
       chore: data,
       done: false
@@ -105,6 +110,10 @@ We then have to write the logic to handle adding or changing a chore from the li
     this.setState({
       chores: newChoreAdded
     })
+    // e.g.
+    // this.setState({
+    //   chores: _.concat(chores, { chore: data, done: false })
+    // })
   }
 
   toggleChore(data) {
@@ -126,8 +135,8 @@ We can then add handlers for user actions on the app. Note that we are using our
 ```javascript
 // When we type into the text box
 handleInputChange(e) {
-    this.setState({ text: e.target.value })
-  }
+  this.setState({ text: e.target.value })
+}
 
 // When we press the add button
 handleSubmit(e) {
@@ -153,7 +162,7 @@ Now that we can add and check off chores from our list, we have to make the app 
 
 To do this we need to know about two important parts of the Pusher API: **Channels** and **Events**. A channel is a namespace for a collection of events. A client can *subscribe* to a specific channel, awaiting events to be fired on it, and both the server and the client can *trigger* an event on that channel that will be broadcast to the other subscribers. In order to act on triggered events, a subscriber must *bind* events to handler functions that will be called when that event is received.
 
-Let me show you what that looks like in our Chores app. We'll start off by  instantiating Pusher in our React app with our app key (from our Pusher account) and some options, in this case our Pusher app cluster:
+Let me show you what that looks like in our Chores app. We'll start off by instantiating Pusher in our React app with our app key (from our Pusher account) and some options, in this case our Pusher app cluster:
 
 ```javascript
 const pusher = new Pusher(config.key, {
